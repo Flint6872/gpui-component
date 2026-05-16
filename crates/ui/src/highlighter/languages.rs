@@ -47,6 +47,7 @@ pub enum Language {
     Toml,
     Tsx,
     TypeScript,
+    Typst,
     Yaml,
     Zig,
 }
@@ -104,6 +105,7 @@ impl Language {
             Self::Toml => "toml",
             Self::Tsx => "tsx",
             Self::TypeScript => "typescript",
+            Self::Typst => "typst",
             Self::Yaml => "yaml",
             Self::Zig => "zig",
         }
@@ -151,6 +153,7 @@ impl Language {
             "toml" => Self::Toml,
             "tsx" => Self::Tsx,
             "typescript" | "ts" => Self::TypeScript,
+            "typst" | "typ" => Self::Typst,
             "yaml" | "yml" => Self::Yaml,
             "zig" => Self::Zig,
             _ => Self::Plain,
@@ -191,6 +194,7 @@ impl Language {
                 "graphql",
             ],
             Self::Svelte => vec!["svelte", "html", "css", "typescript"],
+            Self::Typst => vec!["typst"],
             _ => vec![],
         }
         .into_iter()
@@ -357,6 +361,12 @@ impl Language {
                 tree_sitter_typescript::HIGHLIGHTS_QUERY,
                 "",
                 tree_sitter_typescript::LOCALS_QUERY,
+            ),
+            Self::Typst => (
+                codebook_tree_sitter_typst::LANGUAGE,
+                include_str!("languages/typst/highlights.scm"),
+                include_str!("languages/typst/injections.scm"),
+                "",
             ),
             Self::Diff => (
                 tree_sitter_diff::LANGUAGE,
