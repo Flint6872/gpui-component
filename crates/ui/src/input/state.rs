@@ -946,6 +946,25 @@ impl InputState {
         self.focus(window, cx);
     }
 
+    /// Sets the selection range (in UTF-8 byte offsets).
+    pub fn set_selected_range(&mut self, range: std::ops::Range<usize>, cx: &mut Context<Self>) {
+        self.selected_range = range.into();
+        cx.notify();
+    }
+
+    /// Replaces a range of text with history (for undo/redo support).
+    /// Range is specified in UTF-8 byte offsets.
+    pub fn replace_range_with_history(
+        &mut self,
+        range: Range<usize>,
+        new_text: &str,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        let range_utf16 = self.range_to_utf16(&range);
+        self.replace_text_in_range_silent(Some(range_utf16), new_text, window, cx);
+    }
+
     /// Focus the input field.
     pub fn focus(&self, window: &mut Window, cx: &mut Context<Self>) {
         self.focus_handle.focus(window, cx);
